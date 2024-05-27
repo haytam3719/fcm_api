@@ -12,11 +12,13 @@ firebase_admin.initialize_app(cred)
 def send_notification():
     data = request.get_json()
     token = data.get('token')
+    title = data.get('title', 'Default Title')
+    body = data.get('body', 'Default Body')
 
     # Create Notification
     notification = messaging.Notification(
-        title="Virement Successful",
-        body="Your virement was successful."
+        title=title,
+        body=body
     )
 
     # Create Message
@@ -28,7 +30,7 @@ def send_notification():
     # Send Message
     try:
         response = messaging.send(message)
-        return jsonify({'message': 'Notification sent successfully'})
+        return jsonify({'message': 'Notification sent successfully', 'response': response})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
